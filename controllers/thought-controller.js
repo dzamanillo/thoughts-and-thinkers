@@ -1,7 +1,8 @@
-const { Thought } = require("../models");
+const { Thought, User } = require("../models");
+const { db } = require("../models/User");
 
 const thoughtController = {
-	// get all thoughts
+	//  get all thoughts
 	// /api/thoughts
 	getAllThoughts(req, res) {
 		Thought.find({})
@@ -33,10 +34,24 @@ const thoughtController = {
 	// /api/thoughts
 	createThought({ body }, res) {
 		Thought.create(body)
-			.then((dbThoughtData) => res.json(dbThoughtData))
+			.then((dbThoughtData) => {
+				User.findOneAndUpdate(
+					{ username: dbThoughtData.username },
+					{ $push: { thoughts: dbThoughtData._id } },
+					{ new: true, runValidators: true }
+				).then((data) => {
+					if (!data) {
+						res.status(400).json({ message: "Unable to create thought." });
+						return;
+					}
+					Thought.findOne(data.thoughts[data.thoughts.length - 1]).then(
+						(reply) => res.json(reply)
+					);
+				});
+			})
 			.catch((err) => {
 				console.log(err);
-				res.status(400).json(err);
+				res.status(500).json(err);
 			});
 	},
 
