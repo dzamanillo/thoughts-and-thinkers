@@ -1,0 +1,25 @@
+{
+	"name": "thoughts-and-thinkers",
+	"version": "1.0.0",
+	"description": "",
+	"main": "server.js",
+	"scripts": {
+		"start": "node server.js",
+		"watch": "nodemon server.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/dzamanillo/thoughts-and-thinkers.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/dzamanillo/thoughts-and-thinkers/issues"
+	},
+	"homepage": "https://github.com/dzamanillo/thoughts-and-thinkers#readme",
+	"dependencies": {
+		"express": "^4.17.1",
+		"mongoose": "^5.9.7"
+	}
+}
