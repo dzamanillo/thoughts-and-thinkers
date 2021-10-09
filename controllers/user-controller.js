@@ -9,6 +9,10 @@ const userController = {
 				path: "friends",
 				select: "-__v",
 			})
+			.populate({
+				path: "thoughts",
+				select: "-__v",
+			})
 			.then((dbUserData) => res.json(dbUserData))
 			.catch((err) => {
 				console.log(err);

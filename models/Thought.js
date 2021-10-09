@@ -43,8 +43,8 @@ const ThoughtSchema = new Schema(
 			get: (createdAtVal) => dateFormat(createdAtVal),
 		},
 		username: {
-			type: Schema.Types.ObjectId,
-			ref: "User",
+			type: String,
+			required: "Please enter username",
 		},
 		reactions: [ReactionSchema],
 	},
