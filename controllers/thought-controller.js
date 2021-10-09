@@ -30,7 +30,7 @@ const thoughtController = {
 			});
 	},
 
-	// TODO create new thought
+	// create new thought
 	// /api/thoughts
 	createThought({ body }, res) {
 		Thought.create(body)
@@ -57,6 +57,23 @@ const thoughtController = {
 
 	// TODO update thought by ID
 	// /api/thoughts/:id
+	updateThoughtById({ params, body }, res) {
+		Thought.findOneAndUpdate({ _id: params.id }, body, {
+			new: true,
+			runValidators: true,
+		})
+			.then((dbThoughtData) => {
+				if (!dbThoughtData) {
+					res.status(400).json({ message: "No thought found." });
+					return;
+				}
+				res.json(dbThoughtData);
+			})
+			.catch((err) => {
+				console.log(err);
+				res.status(500).json(err);
+			});
+	},
 
 	// delete thought by ID
 	// /api/thoughts/:id
