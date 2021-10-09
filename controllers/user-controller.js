@@ -47,6 +47,43 @@ const userController = {
 				res.status(500).json(err);
 			});
 	},
+
+	// update user by id
+	// /api/users/:id
+	updateUserById({ params, body }, res) {
+		User.findOneAndUpdate({ _id: params.id }, body, {
+			new: true,
+			runValidators: true,
+		})
+			.then((dbUserData) => {
+				if (!dbUserData) {
+					res.status(400).json({ message: "No user found." });
+					return;
+				}
+				res.json(dbUserData);
+			})
+			.catch((err) => {
+				console.log(err);
+				res.status(500).json(err);
+			});
+	},
+
+	// delete user by id
+	// /api/users/:id
+	deleteUserById({ params }, res) {
+		User.findOneAndDelete({ _id: params.id })
+			.then((dbUserData) => {
+				if (!dbUserData) {
+					res.status(400).json({ message: "No user found." });
+					return;
+				}
+				res.json(dbUserData);
+			})
+			.catch((err) => {
+				console.log(err);
+				res.status(500).json(err);
+			});
+	},
 };
 
 module.exports = userController;
