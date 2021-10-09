@@ -1,7 +1,7 @@
 const { User } = require("../models");
 
 const userController = {
-	// TODO get all users
+	// all users
 	// /api/users
 	getAllUsers(req, res) {
 		User.find({})
@@ -12,10 +12,32 @@ const userController = {
 			});
 	},
 
-	//TODO get user by id
+	// get user by id
 	// /api/users/:id
+	getUserById({ params }, res) {
+		User.findOne({ _id: params.id })
+			.populate({
+				path: "thoughts",
+				select: "-__v",
+			})
+			.populate({
+				path: "friends",
+				select: "-__v",
+			})
+			.then((dbUserData) => {
+				if (!dbUserData) {
+					res.status(400).json({ message: "No user found." });
+					return;
+				}
+				res.json(dbUserData);
+			})
+			.catch((err) => {
+				console.log(err);
+				res.status(400).json(err);
+			});
+	},
 
-	// TODO post new user
+	// post new user
 	// /api/users
 	createUser({ body }, res) {
 		User.create(body)
