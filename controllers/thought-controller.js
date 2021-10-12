@@ -114,12 +114,12 @@ const thoughtController = {
 			});
 	},
 
-	// TODO delete reaction
+	// delete reaction
 	// /api/thoughts/:thoughtId/reactions/:reactionId
 	deleteReaction({ params }, res) {
 		Thought.findOneAndUpdate(
 			{ _id: params.thoughtId },
-			{ $pull: { reactions: params.reactionId } },
+			{ $pull: { reactions: { reactionId: params.reactionId } } },
 			{ new: true, runValidators: true }
 		)
 			.then((dbReactionData) => {
@@ -127,7 +127,7 @@ const thoughtController = {
 					res.status(400).json({ message: "Comment not found." });
 					return;
 				}
-				res.json(dbReactionData);
+				res.json({ msg: "delete success", data: dbReactionData });
 			})
 			.catch((err) => {
 				console.log(err);

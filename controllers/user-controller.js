@@ -1,4 +1,4 @@
-const { User } = require("../models");
+const { User, Thought } = require("../models");
 
 const userController = {
 	// all users
@@ -81,6 +81,14 @@ const userController = {
 	deleteUserById({ params }, res) {
 		User.findOneAndDelete({ _id: params.id })
 			.then((dbUserData) => {
+				console.log("dbUserData: ", dbUserData);
+
+				Thought.deleteMany({
+					username: dbUserData.username,
+				}).then((dbThoughts) => {
+					console.log("dbThoughts: ", dbThoughts);
+				});
+
 				if (!dbUserData) {
 					res.status(400).json({ message: "No user found." });
 					return;
@@ -93,7 +101,7 @@ const userController = {
 			});
 	},
 
-	// TODO add new friend
+	// add new friend
 	// /api/users/:userId/friends/:friendId
 	addFriend({ params }, res) {
 		User.findOneAndUpdate(
@@ -114,7 +122,7 @@ const userController = {
 			});
 	},
 
-	// TODO delete friend from friend list
+	// delete friend from friend list
 	// /api/users/:userId/friends/:friendId
 	deleteFriend({ params }, res) {
 		User.findOneAndUpdate(
