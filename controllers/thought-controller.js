@@ -55,7 +55,7 @@ const thoughtController = {
 			});
 	},
 
-	// TODO update thought by ID
+	// update thought by ID
 	// /api/thoughts/:id
 	updateThoughtById({ params, body }, res) {
 		Thought.findOneAndUpdate({ _id: params.id }, body, {
@@ -89,6 +89,49 @@ const thoughtController = {
 			.catch((err) => {
 				console.log(err);
 				res.status(400).json(err);
+			});
+	},
+
+	//  add reaction to comment
+	// /api/thoughts/:thoughtId/reactions
+	addReaction({ params, body }, res) {
+		Thought.findOneAndUpdate(
+			{ _id: params.thoughtId },
+			{ $push: { reactions: body } },
+			{ new: true, runValidators: true }
+		)
+			.then((dbReactionData) => {
+				console.log("dbReactionData: ", dbReactionData);
+				if (!dbReactionData) {
+					res.status(400).json({ message: "Comment not found." });
+					return;
+				}
+				res.json(dbReactionData);
+			})
+			.catch((err) => {
+				console.log(err);
+				res.status(500).json(err);
+			});
+	},
+
+	// TODO delete reaction
+	// /api/thoughts/:thoughtId/reactions/:reactionId
+	deleteReaction({ params }, res) {
+		Thought.findOneAndUpdate(
+			{ _id: params.thoughtId },
+			{ $pull: { reactions: params.reactionId } },
+			{ new: true, runValidators: true }
+		)
+			.then((dbReactionData) => {
+				if (!dbReactionData) {
+					res.status(400).json({ message: "Comment not found." });
+					return;
+				}
+				res.json(dbReactionData);
+			})
+			.catch((err) => {
+				console.log(err);
+				res.status(500).json(err);
 			});
 	},
 };
