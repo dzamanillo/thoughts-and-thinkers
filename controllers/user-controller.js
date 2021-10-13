@@ -7,11 +7,11 @@ const userController = {
 		User.find({})
 			.populate({
 				path: "friends",
-				select: "-__v",
+				select: "username",
 			})
 			.populate({
 				path: "thoughts",
-				select: "-__v",
+				select: "thoughtText",
 			})
 			.then((dbUserData) => res.json(dbUserData))
 			.catch((err) => {
